@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 st.title('DA Project :smile:')
 
-df = pd.read_csv('BillionairesStatisticsDataset.csv')
+df = pd.read_csv('/workspaces/DA_project/BillionairesStatisticsDataset.csv')
 
 
 #sidebar
@@ -28,7 +28,7 @@ if all:
          df['country'].unique(),df['country'].unique())
 else:
     country = container.multiselect("Select one or more options:",
-        df['country'].unique())
+        df['country'].unique(),default=['India', 'Switzerland'])
        
 # category = st.sidebar.multiselect(
 #     "Select the category: ",
@@ -44,7 +44,7 @@ if all2:
          df['category'].unique(),df['category'].unique())
 else:
     category = container2.multiselect("Select one or more options:",
-        df['category'].unique())
+        df['category'].unique(), default=['Technology'])
   
 
 selfMade = st.sidebar.multiselect(
@@ -82,5 +82,16 @@ with right_column:
     st.subheader(f"{avg_final_worth}")
 
 st.markdown('---')
+
+
+figure = px.bar(df_selection, x = 'rank', y = 'finalWorth')
+figure.update_layout(title_text='Rank vs Worth', title_x=0.5)
+
+fig = px.pie(df_selection, values='finalWorth', names='country', title='Country wise percentage')
+fig.update_layout(title='Country wise percentage', title_x=0.37)
+
+left_column, right_column = st.columns(2)
+left_column.plotly_chart(figure, use_container_width=True)
+right_column.plotly_chart(fig, use_container_width=True)
 
 st.dataframe(df_selection)
